@@ -1,0 +1,12 @@
+kayttaja->selain:
+note left of selain
+  kayttaja kirjoittaa muistiinpanon
+  ja painaa talleta
+end note
+
+selain->palvelin: POST fullstack-exampleapp.herokuapp.com/new_note_spa
+palvelin->selain: status 201, json
+
+note left of selain
+  selain lisää käyttäjän kirjoittaman kommentin listaan
+end note

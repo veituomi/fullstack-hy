@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 
 const Statistiikka = (props) => {
+  const {hyva, neutraali, huono} = props.tiedot
+  const lukumaara = hyva + neutraali + huono
+  const keskiarvo = (hyva - huono) / lukumaara
+  const positiivisia = hyva / lukumaara
+
   return (
     <div>
-      hyvä: {props.tiedot.hyva}<br/>
-      neutraali: {props.tiedot.neutraali}<br/>
-      huono: {props.tiedot.huono}<br/>
+      hyvä: {hyva}<br/>
+      neutraali: {neutraali}<br/>
+      huono: {huono}<br/>
+      keskiarvo: {keskiarvo.toFixed(2)}<br/>
+      positiivisia: {(positiivisia * 100).toFixed(1)} %<br/>
     </div>
   )
 }

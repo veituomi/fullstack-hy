@@ -36,7 +36,10 @@ class App extends React.Component {
     <div>No results.</div>
 
     const list = () => countries.map(country =>
-      <div key={country.name}>{country.name}</div>)
+      <div key={country.name}
+        onClick={() => this.handleFilterChanged({
+          target: { value: country.name }
+        })}>{country.name}</div>)
 
     const view = () => countries.map(country =>
       <div>

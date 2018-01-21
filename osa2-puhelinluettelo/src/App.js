@@ -43,10 +43,35 @@ class App extends React.Component {
     }
   }
 
+  confirmChange = (id) => 
+  window.confirm('Päivitetäänkö numero henkilölle ' +
+    this.state.persons.find(
+      person => person.id === id
+    ).name + '?')
+
+  changePerson = (personId, person) => {
+    if (this.confirmChange(personId)) {
+      personService.update(personId, person)
+        .then(response => this.updatePerson({
+          ...person,
+          id: personId
+        }))
+    }
+  }
+
   removePerson = (removable) => {
     this.setState({
       persons: this.state.persons
         .filter(person => person.id !== removable)
+    })
+  }
+
+  updatePerson = (person) => {
+    const persons = this.state.persons
+    this.setState({ persons: [] }) // Ei päivittynyt ilman
+    this.setState({
+      persons: persons.map(p =>
+        (person.name !== p.name) ? p : person)
     })
   }
 
@@ -56,6 +81,9 @@ class App extends React.Component {
     })
   }
 
+  getPersonId = (name) =>
+    this.state.persons.find(person => person.name === name).id
+
   nameExists = (name) => {
     return this.state.persons
       .some(person => person.name === name)
@@ -63,12 +91,13 @@ class App extends React.Component {
 
   submitPerson = (event) => {
     event.preventDefault()
-    if (this.nameExists(this.state.newName)) {
-      return
-    }
     const person = {
       name: this.state.newName,
       number: this.state.newNumber
+    }
+    if (this.nameExists(person.name)) {
+      this.changePerson(this.getPersonId(person.name), person)
+      return
     }
     this.postPerson(person)
   }

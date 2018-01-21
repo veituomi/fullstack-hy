@@ -11,8 +11,16 @@ class App extends React.Component {
     }
   }
 
+  nameExists = (name) => {
+    return this.state.persons
+      .some(person => person.name === name)
+  }
+
   addPerson = (event) => {
     event.preventDefault()
+    if (this.nameExists(this.state.newName)) {
+      return
+    }
     this.setState({
       persons: [...this.state.persons, {
         name: this.state.newName

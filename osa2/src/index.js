@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Osa = (props) => {
+const Osa = ({ osa }) => {
   return (
-    <p>{props.osa.nimi} {props.osa.tehtavia}</p>
+    <p>{osa.nimi} {osa.tehtavia}</p>
   )
 }
 
@@ -13,15 +13,10 @@ const Otsikko = (props) => {
   )
 }
 
-const Sisalto = (props) => {
-  return (
-    <div>
-      <Osa osa={props.osat[0]}/>
-      <Osa osa={props.osat[1]}/>
-      <Osa osa={props.osat[2]}/>
-    </div>
-  )
-}
+const Sisalto = ({ osat }) =>
+  <div>
+    {osat.map(osa => <Osa key={osa.id} osa={osa}/>)}
+  </div>
 
 const Yhteensa = (props) => {
   return (
@@ -29,30 +24,37 @@ const Yhteensa = (props) => {
   )
 }
 
+const Kurssi = ({ kurssi }) =>
+  <div>
+    <Otsikko kurssi={kurssi.nimi}/>
+    <Sisalto osat={kurssi.osat}/>
+  </div>
+
 const App = () => {
   const kurssi = {
     nimi: 'Half Stack -sovelluskehitys',
     osat: [
       {
         nimi: 'Reactin perusteet',
-        tehtavia: 10
+        tehtavia: 10,
+        id: 1
       },
       {
         nimi: 'Tiedonvälitys propseilla',
-        tehtavia: 7
+        tehtavia: 7,
+        id: 2
       },
       {
         nimi: 'Komponenttien tila',
-        tehtavia: 14
+        tehtavia: 14,
+        id: 3
       }
     ]
   }
 
   return (
     <div>
-      <Otsikko kurssi={kurssi} />
-      <Sisalto osat={kurssi.osat}/>
-      <Yhteensa osat={kurssi.osat} />
+      <Kurssi kurssi={kurssi} />
     </div>
   )
 }

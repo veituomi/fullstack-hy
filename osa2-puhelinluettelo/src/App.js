@@ -5,10 +5,14 @@ class App extends React.Component {
     super(props)
     this.state = {
       persons: [
-        { name: 'Arto Hellas', number: '123-123456' }
+        { name: 'Arto Hellas', number: '040-123456' },
+        { name: 'Martti Tienari', number: '040-123456' },
+        { name: 'Arto Järvinen', number: '040-123456' },
+        { name: 'Lea Kutvonen', number: '040-123456' }
       ],
       newName: '',
-      newNumber: ''
+      newNumber: '',
+      filter: ''
     }
   }
 
@@ -42,19 +46,35 @@ class App extends React.Component {
     })
   }
 
+  handleFilterChanged = (event) => {
+    this.setState({
+      filter: event.target.value
+    })
+  }
+
   render() {
+    const personFilter = (person) => {
+      return person.name
+        .toLowerCase()
+        .includes(this.state.filter.toLowerCase())
+    }
+
     return (
       <div>
-        <h2>Puhelinluettelo</h2>
+        <h1>Puhelinluettelo</h1>
+          rajaa hakua: <input
+            value={this.state.filter}
+            onChange={this.handleFilterChanged}/>
+        <h2>Lisää uusi</h2>
         <form onSubmit={this.addPerson}>
           <div>
             nimi: <input
-              value={this.newName}
+              value={this.state.newName}
               onChange={this.handleNameChanged}/>
           </div>
           <div>
             numero: <input
-              value={this.newNumber}
+              value={this.state.newNumber}
               onChange={this.handleNumberChanged}/>
           </div>
           <div>
@@ -65,11 +85,13 @@ class App extends React.Component {
         <table>
           <tbody>
             {
-              this.state.persons.map(person =>
-                <tr key={person.name}>
-                  <td>{person.name}</td>
-                  <td>{person.number}</td>
-                </tr>)
+              this.state.persons
+                .filter(personFilter)
+                .map(person =>
+                  <tr key={person.name}>
+                    <td>{person.name}</td>
+                    <td>{person.number}</td>
+                  </tr>)
             }
           </tbody>
         </table>

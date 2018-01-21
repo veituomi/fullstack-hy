@@ -6,6 +6,7 @@ class Numbers extends React.Component {
     super(props)
     this.persons = props.persons
     this.filter = props.filter
+    this.onRemove = props.onRemove
   }
 
   render() {
@@ -24,7 +25,10 @@ class Numbers extends React.Component {
               this.persons()
                 .filter(personFilter)
                 .map(person =>
-                  <Person key={person.name} person={person}/>)
+                  <Person
+                    key={person.name}
+                    person={person}
+                    onRemove={this.onRemove}/>)
             }
           </tbody>
         </table>

@@ -28,6 +28,28 @@ class App extends React.Component {
       })
   }
 
+  confirmDelete = (id) => 
+    window.confirm('Poistetaanko ' +
+      this.state.persons.find(
+        person => person.id === id
+      ).name + '?')
+
+  deletePerson = (personId) => {
+    if (this.confirmDelete(personId)) {
+      personService.remove(personId)
+        .then(response => {
+          this.removePerson(personId)  
+        })
+    }
+  }
+
+  removePerson = (removable) => {
+    this.setState({
+      persons: this.state.persons
+        .filter(person => person.id !== removable)
+    })
+  }
+
   addPerson = (person) => {
     this.setState({
       persons: [...this.state.persons, person]
@@ -82,7 +104,8 @@ class App extends React.Component {
           onNumberChanged={this.handleNumberChanged}/>
         <Numbers
           persons={() => this.state.persons}
-          filter={() => this.state.filter}/>
+          filter={() => this.state.filter}
+          onRemove={this.deletePerson}/>
       </div>
     )
   }

@@ -22,22 +22,35 @@ class App extends React.Component {
       })
   }
 
+  postPerson(person) {
+    axios
+      .post('http://localhost:3001/persons', person)
+      .then(response => {
+        this.addPerson(response.data)  
+      })
+  }
+
+  addPerson = (person) => {
+    this.setState({
+      persons: [...this.state.persons, person]
+    })
+  }
+
   nameExists = (name) => {
     return this.state.persons
       .some(person => person.name === name)
   }
 
-  addPerson = (event) => {
+  submitPerson = (event) => {
     event.preventDefault()
     if (this.nameExists(this.state.newName)) {
       return
     }
-    this.setState({
-      persons: [...this.state.persons, {
-        name: this.state.newName,
-        number: this.state.newNumber
-      }]
-    })
+    const person = {
+      name: this.state.newName,
+      number: this.state.newNumber
+    }
+    this.postPerson(person)
   }
 
   handleNameChanged = (event) => {
@@ -66,7 +79,7 @@ class App extends React.Component {
           value={this.state.filter}
           onChange={this.handleFilterChanged}/>
         <AddPerson
-          onSubmit={this.addPerson}
+          onSubmit={this.submitPerson}
           onNameChanged={this.handleNameChanged}
           onNumberChanged={this.handleNumberChanged}/>
         <Numbers

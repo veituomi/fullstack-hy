@@ -18,16 +18,14 @@ const Sisalto = ({ osat }) =>
     {osat.map(osa => <Osa key={osa.id} osa={osa}/>)}
   </div>
 
-const Yhteensa = (props) => {
-  return (
-    <p>yhteensä {props.osat.reduce((a, b) => a + b.tehtavia, 0)} tehtävää</p>
-  )
-}
+const Yhteensa = ({ osat }) =>
+  <p>yhteensä {osat.reduce((a, b) => a + b.tehtavia, 0)} tehtävää</p>
 
 const Kurssi = ({ kurssi }) =>
   <div>
     <Otsikko kurssi={kurssi.nimi}/>
     <Sisalto osat={kurssi.osat}/>
+    <Yhteensa osat={kurssi.osat}/>
   </div>
 
 const App = () => {

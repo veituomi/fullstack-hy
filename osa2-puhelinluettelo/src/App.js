@@ -1,4 +1,5 @@
 import React from 'react'
+import Notification from './Notification'
 import Numbers from './Numbers'
 import AddPerson from './AddPerson'
 import personService from './services/persons'
@@ -10,7 +11,8 @@ class App extends React.Component {
       persons: [],
       newName: '',
       newNumber: '',
-      filter: ''
+      filter: '',
+      messages: []
     }
   }
 
@@ -19,6 +21,23 @@ class App extends React.Component {
       .then(response => {
         this.setState({ persons: response })
       })
+  }
+
+  removeNotification = () => {
+    const messages = this.state.messages.map(m => m)
+    messages.shift()
+    this.setState({ messages: [] })
+    this.setState({ messages })
+  }
+
+  notifyUser = (message) => {
+    const messages = this.state.messages.map(m => m)
+    messages.push(message)
+    console.log(messages)
+    this.setState({ messages })
+    setTimeout(() => {
+      this.removeNotification()
+    }, 5000)
   }
 
   postPerson(person) {
@@ -38,7 +57,7 @@ class App extends React.Component {
     if (this.confirmDelete(personId)) {
       personService.remove(personId)
         .then(response => {
-          this.removePerson(personId)  
+          this.removePerson(personId)
         })
     }
   }
@@ -64,6 +83,7 @@ class App extends React.Component {
       persons: this.state.persons
         .filter(person => person.id !== removable)
     })
+    this.notifyUser('Poistettiin henkilö!')
   }
 
   updatePerson = (person) => {
@@ -73,12 +93,14 @@ class App extends React.Component {
       persons: persons.map(p =>
         (person.name !== p.name) ? p : person)
     })
+    this.notifyUser('Päivitettiin ' + person.name + '!')
   }
 
   addPerson = (person) => {
     this.setState({
       persons: [...this.state.persons, person]
     })
+    this.notifyUser('Lisättiin ' + person.name + '!')
   }
 
   getPersonId = (name) =>
@@ -124,6 +146,8 @@ class App extends React.Component {
     return (
       <div>
         <h1>Puhelinluettelo</h1>
+        {this.state.messages.map(message =>
+          <Notification message={message}/>)}
         rajaa hakua: <input
           value={this.state.filter}
           onChange={this.handleFilterChanged}/>

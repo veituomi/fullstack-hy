@@ -1,7 +1,7 @@
 import React from 'react'
-import axios from 'axios'
 import Numbers from './Numbers'
 import AddPerson from './AddPerson'
+import personService from './services/persons'
 
 class App extends React.Component {
   constructor(props) {
@@ -15,18 +15,16 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    axios
-      .get('http://localhost:3001/persons')
+    personService.getAll()
       .then(response => {
-        this.setState({ persons: response.data })
+        this.setState({ persons: response })
       })
   }
 
   postPerson(person) {
-    axios
-      .post('http://localhost:3001/persons', person)
+    personService.create(person)
       .then(response => {
-        this.addPerson(response.data)  
+        this.addPerson(response)  
       })
   }
 

@@ -18,6 +18,9 @@ const remove = (id) => {
 
 const update = (id, newObject) => {
   return axios.put(`${baseUrl}/${id}`, newObject)
+    .catch(reason => {
+      create(newObject)
+    })
 }
 
 export default { getAll, create, remove, update }

@@ -147,7 +147,7 @@ class App extends React.Component {
       <div>
         <h1>Puhelinluettelo</h1>
         {this.state.messages.map(message =>
-          <Notification message={message}/>)}
+          <Notification key={new Date().getTime()} message={message}/>)}
         rajaa hakua: <input
           value={this.state.filter}
           onChange={this.handleFilterChanged}/>

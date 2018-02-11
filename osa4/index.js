@@ -7,10 +7,7 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const middleware = require('./utils/middleware')
 const blogsRouter = require('./controllers/blogs')
-
-if ( process.env.NODE_ENV !== 'production' ) {
-	require('dotenv').config()
-}
+const config = require('./utils/config')
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -25,8 +22,7 @@ app.use(morgan((tokens, req, res) => {
 	].join(' ')
 }))
 
-const mongoUrl = process.env.MONGODB_URI
-mongoose.connect(mongoUrl)
+mongoose.connect(config.mongoUrl)
 mongoose.Promise = global.Promise
 
 app.use('/api/blogs', blogsRouter)
@@ -34,7 +30,16 @@ app.use('/api/blogs', blogsRouter)
 app.use(middleware.logger)
 app.use(middleware.error)
 
-const PORT = 3003
-app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`)
+const server = http.createServer(app)
+
+server.listen(config.port, () => {
+	console.log(`Server running on port ${config.port}`)
 })
+
+server.on('close', () => {
+	mongoose.connection.close()
+})
+
+module.exports = {
+	app, server
+}

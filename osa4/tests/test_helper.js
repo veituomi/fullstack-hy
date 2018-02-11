@@ -12,7 +12,19 @@ const blogsInDB = async () => {
     return blogs.map(cleanBlog)
 }
 
+const createBlog = async ({ title, author, url, likes }) => {
+    const blog = new Blog({
+        title,
+        author,
+        url,
+        likes
+	})
+
+	return await blog.save()
+}
+
 module.exports = {
+    blogsInDB,
     cleanBlog,
-    blogsInDB
+    createBlog
 }

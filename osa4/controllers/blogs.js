@@ -36,10 +36,23 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-	await Blog.remove({
-		_id: request.params.id
-	})
-	response.status(200).send()
+	try {
+		const token = request.token
+		const decodedToken = jwt.verify(token, process.env.SECRET)
+		const blog = await Blog.findById(request.params.id)
+		if (blog == undefined) {
+			return response.status(404).json({ error: 'Resource does not exist.' })
+		}
+		if (blog.user != decodedToken.id) {
+			return response.status(403).json({ error: 'Access denied.' })
+		}
+		await Blog.remove({
+			_id: request.params.id
+		})
+		response.status(200).send()
+	} catch (ex) {
+		return response.status(500).json({ error: 'Something went wrong.' })
+	}
 })
 
 blogsRouter.put('/:id', async (request, response) => {

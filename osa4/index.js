@@ -27,6 +27,8 @@ app.use(morgan((tokens, req, res) => {
 mongoose.connect(config.mongoUrl)
 mongoose.Promise = global.Promise
 
+app.use(middleware.tokenExtractor)
+
 app.use('/api/blogs', blogsRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/users', usersRouter)

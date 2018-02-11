@@ -1,4 +1,5 @@
 const listHelper = require('../utils/list_helper')
+const helper = require('./test_helper')
 
 test('dummy is called', () => {
 	const blogs = []
@@ -87,12 +88,6 @@ describe('total likes', () => {
 })
 
 describe('favorite blog', () => {
-	const cleanBlog = ({ title, author, likes }) => ({
-		title,
-		author,
-		likes
-	})
-
 	test('when list has no blogs is the favorite blog undefined', () => {
 		const result = listHelper.favoriteBlog([])
 		expect(result).toEqual(undefined)
@@ -100,18 +95,20 @@ describe('favorite blog', () => {
 
 	test('when list has only one blog is the favorite blog that', () => {
 		const result = listHelper.favoriteBlog(listWithOneBlog)
-		expect(cleanBlog(result)).toEqual({
+		expect(helper.cleanBlog(result)).toEqual({
 			title: 'Go To Statement Considered Harmful',
 			author: 'Edsger W. Dijkstra',
+			url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
 			likes: 5,
 		})
 	})
 
 	test('when list has more than one blog is the favorite blog the one that has most likes', () => {
 		const result = listHelper.favoriteBlog(blogs)
-		expect(cleanBlog(result)).toEqual({
+		expect(helper.cleanBlog(result)).toEqual({
 			title: "Canonical string reduction",
 			author: "Edsger W. Dijkstra",
+			url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
 			likes: 12
 		})
 	})

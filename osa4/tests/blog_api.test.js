@@ -1,14 +1,12 @@
 const supertest = require('supertest')
 const { app, server } = require('../index')
 const Blog = require('../models/blog')
+const helper = require('./test_helper')
 
 const api = supertest(app)
 
-const cleanBlog = ({ title, author, url, likes }) => ({
-	title,
-	author,
-	url,
-	likes
+beforeAll(async () => {
+	await Blog.remove({})
 })
 
 describe('api tests', () => {
@@ -46,9 +44,7 @@ describe('api tests', () => {
 			.expect(201)
 			.expect('Content-Type', /application\/json/)
 
-		const response = await api.get('/api/blogs')
-
-		expect(response.body.map(blog => cleanBlog(blog)))
+		expect(await helper.blogsInDB())
 			.toContainEqual({ ...blog, likes: 0 })
 	})
 
@@ -62,10 +58,6 @@ describe('api tests', () => {
 			.send(blog)
 			.expect(400)
 	})
-})
-
-beforeAll(async () => {
-	await Blog.remove({})
 })
 
 afterAll(() => {

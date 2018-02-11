@@ -131,3 +131,18 @@ describe('most blogs', () => {
 		})
 	})
 })
+
+describe('most likes', () => {
+	test('when list has no blogs is the blogger with most likes undefined', () => {
+		const result = listHelper.mostLikes([])
+		expect(result).toEqual(undefined)
+	})
+
+	test('when list has more than one blog is the blogger with most likes defined', () => {
+		const result = listHelper.mostLikes(blogs)
+		expect(result).toEqual({
+			author: "Edsger W. Dijkstra",
+			votes: 17
+		})
+	})
+})

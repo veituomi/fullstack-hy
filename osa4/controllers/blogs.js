@@ -30,24 +30,24 @@ blogsRouter.post('/', async (request, response) => {
 		if (!token || !decodedToken.id) {
 			return response.status(401).json({ error: 'Token is not valid.' })
 		}
+
+		const user = await User.findById(decodedToken.id)
+
+		const blog = new Blog({
+			likes: 0,
+			...request.body,
+			user: user._id
+		})
+
+		const result = await blog.save()
+
+		user.blogs = user.blogs.concat(result._id)
+		await user.save()
+
+		response.status(201).json(result)
 	} catch (ex) {
 		return response.status(500).json({ error: 'Something went wrong.' })
 	}
-
-	const user = await User.findOne({})
-
-	const blog = new Blog({
-		likes: 0,
-		...request.body,
-		user: user._id
-	})
-
-	const result = await blog.save()
-
-	user.blogs = user.blogs.concat(result._id)
-	await user.save()
-
-	response.status(201).json(result)
 })
 
 blogsRouter.delete('/:id', async (request, response) => {

@@ -9,6 +9,14 @@ const api = supertest(app)
 beforeAll(async () => {
 	await Blog.remove({})
 	await User.remove({})
+
+	await api
+		.post('/api/users')
+		.send({
+			username: 'username',
+			password: 'password',
+			name: 'name'
+		})
 })
 
 describe('api get tests', () => {

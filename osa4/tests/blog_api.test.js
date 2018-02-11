@@ -20,8 +20,15 @@ describe('api tests', () => {
 	})
 
 	test('blog can be created', async () => {
+		const blog = {
+			title: 'C#',
+			author: 'Anders Hejlsberg',
+			likes: 2423,
+			url: 'library'
+		}
 		await api
-			.post('/api/blogs', {})
+			.post('/api/blogs')
+			.send(blog)
 			.expect(201)
 			.expect('Content-Type', /application\/json/)
 	})
@@ -43,6 +50,17 @@ describe('api tests', () => {
 
 		expect(response.body.map(blog => cleanBlog(blog)))
 			.toContainEqual({ ...blog, likes: 0 })
+	})
+
+	test('uncomplete blog is not accepted', async () => {
+		const blog = {
+			url: 'library'
+		}
+
+		await api
+			.post('/api/blogs')
+			.send(blog)
+			.expect(400)
 	})
 })
 

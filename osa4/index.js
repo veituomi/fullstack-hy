@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const middleware = require('./utils/middleware')
 const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
 const config = require('./utils/config')
 
 app.use(cors())
@@ -26,6 +27,7 @@ mongoose.connect(config.mongoUrl)
 mongoose.Promise = global.Promise
 
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 app.use(middleware.logger)
 app.use(middleware.error)

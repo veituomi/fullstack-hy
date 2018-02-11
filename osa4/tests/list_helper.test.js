@@ -116,3 +116,18 @@ describe('favorite blog', () => {
 		})
 	})
 })
+
+describe('most blogs', () => {
+	test('when list has no blogs is the blogger with most blogs undefined', () => {
+		const result = listHelper.mostBlogs([])
+		expect(result).toEqual(undefined)
+	})
+
+	test('when list has more than one blog is the blogger with most blogs defined', () => {
+		const result = listHelper.mostBlogs(blogs)
+		expect(result).toEqual({
+			author: "Robert C. Martin",
+			blogs: 3
+		})
+	})
+})

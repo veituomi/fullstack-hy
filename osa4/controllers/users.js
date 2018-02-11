@@ -9,17 +9,27 @@ usersRouter.get('/', async (request, response) => {
 })
 
 usersRouter.post('/', async (request, response) => {
-	const required = ['username', 'password', 'name', 'adult']
+	const { username, password, name, adult } = { adult: true, ...request.body}
+
+	const required = ['username', 'password', 'name']
 
 	const errors = required
 		.filter(field => request.body[field] == undefined)
 		.map(field => `Required field ${field} is missing.`)
 
+	const existingUsers = await User.find({ username })
+	if (existingUsers.length > 0) {
+		errors.push(`Username ${username} is already taken.`)
+	}
+
+	if (password.length < 3) {
+		errors.push(`Password is too short.`)
+	}
+
 	if (errors.length > 0) {
 		return response.status(400).json(errors)
 	}
 
-	const { username, password, name, adult} = request.body
 	const passhash = await bcrypt.hash(password, config.passwordSaltRounds)
 
 	const user = new User({

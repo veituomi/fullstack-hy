@@ -1,12 +1,14 @@
 const supertest = require('supertest')
 const { app, server } = require('../index')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 
 const api = supertest(app)
 
 beforeAll(async () => {
 	await Blog.remove({})
+	await User.remove({})
 })
 
 describe('api get tests', () => {
@@ -104,6 +106,33 @@ describe('api put tests', () => {
 		const updatedBlog = await helper.getBlog(blog._id)
 
 		expect(updatedBlog.likes).toBe(5)
+	})
+})
+
+describe('user api post tests', () => {
+	test('user can not be created if password is too short', async () => {
+		const user = {
+			title: 'usernamesomedontknow',
+			password: '',
+			name: 'User\'s Name'
+		}
+		await api
+			.post('/api/users')
+			.send(user)
+			.expect(400)
+    })
+
+	test('user can not be created if username is taken', async () => {
+		const user = {
+			title: 'usernamesomedontknow',
+			password: '1234',
+			name: 'User\'s Name'
+        }
+        await User.create(user)
+		await api
+			.post('/api/users')
+			.send(user)
+			.expect(400)
 	})
 })
 

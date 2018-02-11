@@ -23,8 +23,13 @@ const createBlog = async ({ title, author, url, likes }) => {
 	return await blog.save()
 }
 
+const getBlog = async (id) => {
+    return await Blog.findOne({ _id: id })
+}
+
 module.exports = {
     blogsInDB,
     cleanBlog,
-    createBlog
+    createBlog,
+    getBlog
 }

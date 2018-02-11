@@ -84,6 +84,29 @@ describe('api delete tests', () => {
 	})
 })
 
+describe('api put tests', () => {
+	test('blogs can be modified', async () => {
+		const blog = await helper.createBlog({
+			title: 'New blog',
+			author: 'Linux',
+			url: '/dev/null',
+			likes: -1
+		})
+
+		await api
+			.put(`/api/blogs/${blog._id}`)
+			.send({
+				...blog,
+				likes: 5
+			})
+			.expect(200)
+
+		const updatedBlog = await helper.getBlog(blog._id)
+
+		expect(updatedBlog.likes).toBe(5)
+	})
+})
+
 afterAll(() => {
 	server.close()
 })

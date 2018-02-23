@@ -3,6 +3,11 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
+blogsRouter.get('/', async (request, response) => {
+	const blogs = await Blog.find({})
+	response.send(blogs)
+})
+
 blogsRouter.post('/', async (request, response) => {
 	if (request.body.author == undefined || request.body.title == undefined) {
 		return response.status(400).send()

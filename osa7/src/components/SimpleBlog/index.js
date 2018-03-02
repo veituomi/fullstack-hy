@@ -1,0 +1,1 @@
+export { SimpleBlog } from './SimpleBlog'

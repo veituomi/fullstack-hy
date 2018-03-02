@@ -8,10 +8,13 @@ export const actionForAnecdote = {
 		};
 	},
 
-	initialize(anecdotes) {
-		return {
-			type: 'INITIALIZE_ANECDOTES',
-			anecdotes
+	initialize() {
+		return async (dispatch) => {
+			const anecdotes = await anecdoteService.getAll();
+			dispatch({
+				type: 'INITIALIZE_ANECDOTES',
+				anecdotes
+			});
 		};
 	},
 

@@ -9,7 +9,9 @@ class Notification extends React.Component {
 		};
 		return (
 			<div style={style}>
-				render here notification...
+				{this.props.store.getState().notifications.map(
+					notification => <div key={notification.id}>{notification.content}</div>
+				)}
 			</div>
 		);
 	}

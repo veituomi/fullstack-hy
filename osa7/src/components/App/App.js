@@ -1,17 +1,20 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Blog } from '../Blog';
 import Login from '../Login';
 import NewBlog from '../NewBlog';
 import Notifications from '../Notifications';
 import * as blogService from '../../services/blogs';
 import * as loginService from '../../services/login';
+import * as userService from '../../services/users';
 
 export class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			user: undefined,
-			blogs: []
+			blogs: [],
+			users: []
 		};
 	}
 
@@ -30,6 +33,9 @@ export class App extends React.Component {
 			blogs.sort((a, b) => b.likes - a.likes);
 			this.setState({ blogs });
 		});
+		userService.getAll().then(users => {
+			this.setState({ users });
+		});
 	}
 
 	setUser = (user) => {
@@ -43,6 +49,16 @@ export class App extends React.Component {
 		this.setState({ user });
 	}
 
+	navbar = () => {
+		return (
+			<div>
+				<Link to="/blogs">blogs</Link>&nbsp;
+				<Link to="/blogs/new">new blog</Link>&nbsp;
+				<Link to="/users">users</Link>&nbsp;
+			</div>
+		);
+	}
+
 	selectContent = () => {
 		if (!this.state.user) {
 			return (
@@ -52,11 +68,45 @@ export class App extends React.Component {
 		return (
 			<div>
 				<button onClick={() => this.setUser()}>logout</button>
-				<NewBlog pushNotification={this.pushNotification}></NewBlog>
-				<h1>blogs</h1>
-				{this.state.blogs.map(blog =>
-					<Blog key={blog._id} blog={blog} pushNotification={this.pushNotification}/>
-				)}
+				<Router>
+					<div>
+						{this.navbar()}
+						<Route exact path="/blogs/new" render={() =>
+							<NewBlog pushNotification={this.pushNotification}></NewBlog>
+						} />
+						<Route exact path="/blogs" render={() =>
+							<div>
+								<h1>blogs</h1>
+								{this.state.blogs.map(blog =>
+									<Blog key={blog._id} blog={blog} pushNotification={this.pushNotification}/>
+								)}
+							</div>
+						} />
+						<Route exact path="/users" render={() =>
+							<div>
+								<h1>users</h1>
+								<table>
+									<thead>
+										<tr>
+											<th>name</th>
+											<th>username</th>
+											<th>blogs added</th>
+										</tr>
+									</thead>
+									<tbody>
+										{this.state.users.map(user =>
+											<tr key={user.id}>
+												<td>{user.name}</td>
+												<td>{user.username}</td>
+												<td>{user.blogs.length}</td>
+											</tr>
+										)}
+									</tbody>
+								</table>
+							</div>
+						} />
+					</div>
+				</Router>
 			</div>
 		);
 	}

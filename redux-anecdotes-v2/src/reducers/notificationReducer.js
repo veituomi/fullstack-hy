@@ -8,7 +8,8 @@ const getId = () => new Date().getTime();
 const asObject = (notification) => {
 	return {
 		content: notification,
-		time: getId()
+		time: getId(),
+		id: Math.floor(Math.random() * 1000000)
 	};
 };
 

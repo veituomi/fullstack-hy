@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, NavLink, Redirect } from 'react-router-dom'
+import { ListGroup, ListGroupItem } from 'react-bootstrap'
 import Notifications from './components/Notifications'
 
 const navlinkActive = {
@@ -31,16 +32,16 @@ const Menu = () => (
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
+    <ListGroup>
       {anecdotes.map(anecdote => {
         const url = `/anecdotes/${anecdote.id}`
-        return <li key={anecdote.id} >
+        return <ListGroupItem key={anecdote.id} >
           <Link to={url}>
             {anecdote.content}
           </Link>
-        </li>
+        </ListGroupItem>
       })}
-    </ul>  
+    </ListGroup>  
   </div>
 )
 

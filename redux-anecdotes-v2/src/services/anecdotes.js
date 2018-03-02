@@ -20,7 +20,8 @@ const remove = async (id) => {
 };
 
 const update = async (newObject) => {
-	return await axios.put(`${url}/${newObject.id}`, newObject);
+	const response = await axios.put(`${url}/${newObject.id}`, newObject);
+	return response.data;
 };
 
 export default {

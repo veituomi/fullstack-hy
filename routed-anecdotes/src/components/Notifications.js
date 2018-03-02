@@ -2,6 +2,8 @@ import React from 'react'
 
 const defaultStyle = {
 	border: '2px solid black',
+	borderRadius: '10px',
+	padding: '8px',
 	background: 'orange',
 }
 
@@ -38,14 +40,18 @@ class Notifications extends React.Component {
 					.map(notification => (
 						<div style={{
 							...defaultStyle,
-							...notification.style
+							...notification.style,
 						}}>{notification.content}
 						{(notification.buttons || []).map(button =>
 							<button onClick={() => {
-								notification.dismissed = true
-								this.setState({ notifications: this.state.notifications })
-								button.callback()
-							}}>{button.label}</button>
+									notification.dismissed = true
+									this.setState({ notifications: this.state.notifications })
+									button.callback() }}
+								style={{
+									...notification.buttonStyle,
+									...button.style}}>
+								{button.label}
+							</button>
 						)}
 						</div>
 					))}

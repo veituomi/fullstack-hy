@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './App';
 import store from './store';
+import anecdoteService from './services/anecdotes';
+import { actionForAnecdote } from './reducers/anecdoteReducer';
 
 const render = () => {
 	ReactDOM.render(
@@ -15,3 +17,7 @@ const render = () => {
 
 render();
 store.subscribe(render);
+
+anecdoteService.getAll().then(anecdotes =>
+	store.dispatch(actionForAnecdote.initialize(anecdotes))
+);

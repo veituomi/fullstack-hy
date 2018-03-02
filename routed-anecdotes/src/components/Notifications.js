@@ -5,6 +5,7 @@ const defaultStyle = {
 	borderRadius: '10px',
 	padding: '8px',
 	background: 'orange',
+	marginBottom: '13px',
 }
 
 class Notifications extends React.Component {

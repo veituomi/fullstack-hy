@@ -1,12 +1,30 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, NavLink, Redirect } from 'react-router-dom'
 import Notifications from './components/Notifications'
 
+const navlinkActive = {
+  background: 'black',
+  color: 'white',
+  textDecoration: 'none'
+}
+
+const navigation = [
+  { route: '/', label: 'anecdotes' },
+  { route: '/create', label: 'create new' },
+  { route: '/about', label: 'about' },
+]
+
 const Menu = () => (
-  <div>    
-    <Link to="/">anecdotes</Link>&nbsp;
-    <Link to="/create">create new</Link>&nbsp;
-    <Link to="/about">about</Link>&nbsp;
+  <div style={{ background: '#7777ff' }}>
+    {navigation.map(item =>
+      <NavLink activeStyle={navlinkActive}
+        to={item.route}
+        exact={item.route}
+        style={{
+          padding: '12px'
+        }}
+      >{item.label}</NavLink>
+    )}
   </div>
 )
 

@@ -1,15 +1,3 @@
-const anecdotesAtStart = [];
-
-const getId = () => (100000 * Math.random()).toFixed(0);
-
-const asObject = (anecdote) => {
-	return {
-		content: anecdote,
-		id: getId(),
-		votes: 0
-	};
-};
-
 export const actionForAnecdote = {
 	create(content) {
 		return {
@@ -33,7 +21,7 @@ export const actionForAnecdote = {
 	}
 };
 
-const initialState = anecdotesAtStart.map(asObject);
+const initialState = [];
 
 const reducer = (store = initialState, action) => {
 	if (action.type === 'VOTE_ANECDOTE') {
@@ -43,11 +31,9 @@ const reducer = (store = initialState, action) => {
 		return [...old, { ...voted, votes: voted.votes + 1 }];
 	}
 	if (action.type === 'CREATE_ANECDOTE') {
-
-		return [...store, asObject(action.content) ];
+		return [...store, action.content ];
 	}
 	if (action.type === 'INITIALIZE_ANECDOTES') {
-
 		return [ ...action.anecdotes ];
 	}
 

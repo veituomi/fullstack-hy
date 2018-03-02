@@ -100,7 +100,7 @@ export class Blog extends React.Component {
 				</div>
 			);
 		}
-		const url = `/blogs/${this.props.blog._id}`;
+		const url = `/blogs/view/${this.props.blog._id}`;
 		return (
 			<div style={this.state.style} className="blogElement">
 				<Link to={url}>

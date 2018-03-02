@@ -50,12 +50,40 @@ export class App extends React.Component {
 		this.setState({ user });
 	}
 
+	confirmLogout = () => {
+		this.pushNotification({
+			content: 'Are you sure you want to log out?',
+			buttons: [
+				{
+					label: 'Yes',
+					callback: () => this.setUser()
+				},
+				{
+					label: 'No',
+					callback: () => void 0
+				},
+				{
+					label: 'Ask me later',
+					callback: () => setTimeout(() => this.confirmLogout(), 10000)
+				}
+			]
+		});
+	}
+
 	navbar = () => {
 		return (
-			<div>
+			<div style={{
+				padding: '15px',
+				marginTop: '5px',
+				borderColor: 'black',
+				borderWidth: '1px 0px 1px 0px',
+				borderStyle: 'solid'
+			}}>
 				<Link to="/blogs">blogs</Link>&nbsp;
 				<Link to="/blogs/new">new blog</Link>&nbsp;
 				<Link to="/users">users</Link>&nbsp;
+				You are logged in as {this.state.user.name}&nbsp;
+				<button onClick={this.confirmLogout}>logout</button>
 			</div>
 		);
 	}
@@ -68,7 +96,6 @@ export class App extends React.Component {
 		}
 		return (
 			<div>
-				<button onClick={() => this.setUser()}>logout</button>
 				<Router>
 					<div>
 						{this.navbar()}
@@ -83,7 +110,7 @@ export class App extends React.Component {
 								)}
 							</div>
 						} />
-						<Route path="/blogs/:id" render={({match}) => {
+						<Route path="/blogs/view/:id" render={({match}) => {
 							const blog = this.state.blogs
 								.filter(u => u._id === match.params.id)[0];
 							if (blog) {

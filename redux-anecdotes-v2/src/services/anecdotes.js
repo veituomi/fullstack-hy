@@ -15,7 +15,17 @@ const createNew = async (content) => {
 	return response.data;
 };
 
+const remove = async (id) => {
+	return await axios.delete(url + '/' + id);
+};
+
+const update = async (newObject) => {
+	return await axios.put(`${url}/${newObject.id}`, newObject);
+};
+
 export default {
 	createNew,
-	getAll
+	getAll,
+	remove,
+	update
 };

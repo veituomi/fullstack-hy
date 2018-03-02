@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdotes';
+
 export const actionForAnecdote = {
 	create(content) {
 		return {
@@ -28,7 +30,14 @@ const reducer = (store = initialState, action) => {
 		const old = store.filter(a => a.id !== action.id);
 		const voted = store.find(a => a.id === action.id);
 
-		return [...old, { ...voted, votes: voted.votes + 1 }];
+		const updated = {
+			...voted,
+			votes: voted.votes + 1
+		};
+
+		anecdoteService.update(updated);
+
+		return [...old, updated];
 	}
 	if (action.type === 'CREATE_ANECDOTE') {
 		return [...store, action.content ];

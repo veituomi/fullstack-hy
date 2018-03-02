@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import * as blogService from '../../services/blogs';
 import * as loginService from '../../services/login';
@@ -8,7 +9,7 @@ export class Blog extends React.Component {
 		super(props);
 		this.state = {
 			hide: false,
-			expand: false,
+			expand: props.expand,
 			style: undefined,
 			likes: props.blog.likes
 		};
@@ -16,13 +17,6 @@ export class Blog extends React.Component {
 
 	selectedStyle = {
 		border: '1px solid black'
-	}
-
-	click = () => {
-		this.setState({
-			expand: !this.state.expand,
-			style: this.state.expand ? undefined : this.selectedStyle
-		});
 	}
 
 	like = (amount = 1) => {
@@ -97,17 +91,28 @@ export class Blog extends React.Component {
 		if (this.state.hide) {
 			return <div style={{ display: 'none' }}>Hidden item</div>;
 		}
+		if (this.state.expand) {
+			return (
+				<div style={this.state.style} className="blogElement">
+					<h2>{this.props.blog.title}</h2>
+					author: {this.props.blog.author}<br/>
+					{this.expanded()}
+				</div>
+			);
+		}
+		const url = `/blogs/${this.props.blog._id}`;
 		return (
 			<div style={this.state.style} className="blogElement">
-				<h2 onClick={this.click} style={{cursor: 'pointer'}}>{this.props.blog.title}</h2>
-				author: {this.props.blog.author}<br/>
-				{this.expanded()}
+				<Link to={url}>
+					<h2>{this.props.blog.title}</h2>
+				</Link>
 			</div>
 		);
 	}
 }
 
 Blog.propTypes = {
+	expand: PropTypes.bool.isRequired,
 	blog: PropTypes.any.isRequired,
 	pushNotification: PropTypes.func
 };

@@ -79,10 +79,18 @@ export class App extends React.Component {
 							<div>
 								<h1>blogs</h1>
 								{this.state.blogs.map(blog =>
-									<Blog key={blog._id} blog={blog} pushNotification={this.pushNotification}/>
+									<Blog key={blog._id} blog={blog} expand={false} pushNotification={this.pushNotification}/>
 								)}
 							</div>
 						} />
+						<Route path="/blogs/:id" render={({match}) => {
+							const blog = this.state.blogs
+								.filter(u => u._id === match.params.id)[0];
+							if (blog) {
+								return <Blog blog={blog} expand={true} pushNotification={this.pushNotification} />;
+							}
+							return <div>Hold on. Loading data...</div>;
+						}} />
 						<Route exact path="/users" render={() =>
 							<div>
 								<h1>users</h1>

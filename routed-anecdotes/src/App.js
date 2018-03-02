@@ -1,5 +1,6 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import Notifications from './components/Notifications'
 
 const Menu = () => (
   <div>    
@@ -25,14 +26,19 @@ const AnecdoteList = ({ anecdotes }) => (
   </div>
 )
 
-const Anecdote = ({ anecdote }) => (
-  <div>
-    <h2>{anecdote.content}</h2>
-    <div>has {anecdote.votes} votes</div>
-    <div>author: {anecdote.author}</div>
-    <a href={anecdote.info}>{anecdote.info}</a>
-  </div>
-)
+const Anecdote = ({ anecdote }) => {
+  if (anecdote === undefined) {
+    return <Redirect to="/" />
+  }
+  return (
+    <div>
+      <h2>{anecdote.content}</h2>
+      <div>has {anecdote.votes} votes</div>
+      <div>author: {anecdote.author}</div>
+      <a href={anecdote.info}>{anecdote.info}</a>
+    </div>
+  )
+}
 
 const About = () => (
   <div>
@@ -62,7 +68,7 @@ class CreateNew extends React.Component {
     this.state = {
       content: '',
       author: '',
-      info: ''
+      info: '',
     }
   }
 
@@ -73,11 +79,23 @@ class CreateNew extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.props.addNew({
+    const id = this.props.addNew({
       content: this.state.content,
       author: this.state.author,
       info: this.state.info,
       votes: 0
+    })
+    this.props.pushNotification({
+      content: `a new anecdote ${this.state.content} created!`,
+      buttons: [
+        {
+          label: 'OK',
+          callback: () => void 0
+        }
+      ]
+    })
+    this.setState({
+      redirect: `/anecdotes/${id}`
     })
   }
 
@@ -100,6 +118,9 @@ class CreateNew extends React.Component {
           </div> 
           <button>create</button>
         </form>
+        {
+          this.state.redirect ? <Redirect to={this.state.redirect} /> : <span/>
+        }
       </div>  
     )
 
@@ -131,9 +152,16 @@ class App extends React.Component {
     } 
   }
 
+  pushNotification = () => void 0
+
+	subscribeNotifications = (callback) => {
+		this.pushNotification = callback
+	}
+
   addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     this.setState({ anecdotes: this.state.anecdotes.concat(anecdote) })
+    return anecdote.id
   }
 
   anecdoteById = (id) =>
@@ -157,12 +185,15 @@ class App extends React.Component {
       <Router>
         <div>
           <h1>Software anecdotes</h1>
+          <Notifications subscribe={this.subscribeNotifications} />
           <Menu />
           <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
           <Route exact path="/anecdotes/:id" render={({match}) =>
             <Anecdote anecdote={this.anecdoteById(match.params.id)} />}
           />
-          <Route path="/create" render={() => <CreateNew addNew={this.addNew}/>} />
+          <Route path="/create" render={() =>
+            <CreateNew pushNotification={this.pushNotification} addNew={this.addNew}/>
+          }/>
           <Route path="/about" render={() => <About />} />
           <Footer />
         </div>

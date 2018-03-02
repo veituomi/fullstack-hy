@@ -1,17 +1,17 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import * as blogService from '../../services/blogs'
-import * as loginService from '../../services/login'
+import React from 'react';
+import PropTypes from 'prop-types';
+import * as blogService from '../../services/blogs';
+import * as loginService from '../../services/login';
 
 export class Blog extends React.Component {
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
 			hide: false,
 			expand: false,
 			style: undefined,
 			likes: props.blog.likes
-		}
+		};
 	}
 
 	selectedStyle = {
@@ -22,19 +22,19 @@ export class Blog extends React.Component {
 		this.setState({
 			expand: !this.state.expand,
 			style: this.state.expand ? undefined : this.selectedStyle
-		})
+		});
 	}
 
 	like = (amount = 1) => {
-		const likes = this.state.likes + amount
+		const likes = this.state.likes + amount;
 		blogService
 			.update({
 				...this.props.blog,
 				likes
 			})
-			.then(blog => {
-				this.setState({ likes })
-			})
+			.then(() => {
+				this.setState({ likes });
+			});
 	}
 
 	confirmRemove = () => {
@@ -54,7 +54,7 @@ export class Blog extends React.Component {
 					callback: () => setTimeout(() => this.confirmRemove(), 10000)
 				}
 			]
-		})
+		});
 	}
 
 	remove = () => {
@@ -62,21 +62,21 @@ export class Blog extends React.Component {
 			.remove(this.props.blog)
 			.then(status => {
 				if (status === 200) {
-					this.setState({ hide: true })
-					this.props.pushNotification({ content: `Deleted ${this.props.blog.title}.` })
+					this.setState({ hide: true });
+					this.props.pushNotification({ content: `Deleted ${this.props.blog.title}.` });
 				} else {
-					this.props.pushNotification({ content: 'Failed to delete!' })
+					this.props.pushNotification({ content: 'Failed to delete!' });
 				}
-			})
+			});
 	}
 
 	deleteButton = () => {
 		if (!loginService.getUser() ||
 				this.props.blog.user !== loginService.getUser().id ||
 				!this.props.blog.user) {
-			return
+			return;
 		}
-		return <button onClick={this.confirmRemove}>delete</button>
+		return <button onClick={this.confirmRemove}>delete</button>;
 	}
 
 	expanded = () => {
@@ -89,13 +89,13 @@ export class Blog extends React.Component {
 					<button onClick={() => this.like(1)}>like</button>
 					<button onClick={() => this.like(-1)}>dislike</button>
 				</div>
-			)
+			);
 		}
 	}
 
 	render() {
 		if (this.state.hide) {
-			return <div style={{ display: 'none' }}>Hidden item</div>
+			return <div style={{ display: 'none' }}>Hidden item</div>;
 		}
 		return (
 			<div style={this.state.style} className="blogElement">
@@ -103,11 +103,11 @@ export class Blog extends React.Component {
 				author: {this.props.blog.author}<br/>
 				{this.expanded()}
 			</div>
-		)
+		);
 	}
 }
 
 Blog.propTypes = {
 	blog: PropTypes.any.isRequired,
 	pushNotification: PropTypes.func
-}
+};

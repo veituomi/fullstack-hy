@@ -1,36 +1,37 @@
-import React from 'react'
-import * as blogService from '../services/blogs'
+import React from 'react';
+import PropTypes from 'prop-types';
+import * as blogService from '../services/blogs';
 
 class NewBlog extends React.Component {
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
 			title: '',
 			author: '',
 			url: ''
-		}
+		};
 	}
 
 	handleFieldChange = (event) => {
 		if (event.target.name === 'title') {
-			this.setState({ title: event.target.value })
+			this.setState({ title: event.target.value });
 		} else if (event.target.name === 'author') {
-			this.setState({ author: event.target.value })
+			this.setState({ author: event.target.value });
 		} else if (event.target.name === 'url') {
-			this.setState({ url: event.target.value })
+			this.setState({ url: event.target.value });
 		}
 	}
 
 	create = (event) => {
-		event.preventDefault()
+		event.preventDefault();
 		blogService.create({
 			title: this.state.title,
 			author: this.state.author,
 			url: this.state.url
-		})
+		});
 		this.props.pushNotification({
 			content: 'New blog created!'
-		})
+		});
 	}
 
 	render() {
@@ -41,35 +42,39 @@ class NewBlog extends React.Component {
 					<div>
 						title
 						<input
-						type="text"
-						name="title"
-						value={this.state.title}
-						onChange={this.handleFieldChange}
+							type="text"
+							name="title"
+							value={this.state.title}
+							onChange={this.handleFieldChange}
 						/>
 					</div>
 					<div>
 						author
 						<input
-						type="text"
-						name="author"
-						value={this.state.author}
-						onChange={this.handleFieldChange}
+							type="text"
+							name="author"
+							value={this.state.author}
+							onChange={this.handleFieldChange}
 						/>
 					</div>
 					<div>
 						url
 						<input
-						type="text"
-						name="url"
-						value={this.state.url}
-						onChange={this.handleFieldChange}
+							type="text"
+							name="url"
+							value={this.state.url}
+							onChange={this.handleFieldChange}
 						/>
 					</div>
 					<button type="submit">create</button>
 				</form>
 			</div>
-		)
+		);
 	}
 }
 
-export default NewBlog
+NewBlog.propTypes = {
+	pushNotification: PropTypes.func
+};
+
+export default NewBlog;

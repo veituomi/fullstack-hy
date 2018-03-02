@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export const SimpleBlog = ({ blog, onClick }) => (
 	<div className="content">
@@ -10,4 +11,9 @@ export const SimpleBlog = ({ blog, onClick }) => (
 			<button onClick={onClick}>like</button>
 		</div>
 	</div>
-)
+);
+
+SimpleBlog.propTypes = {
+	blog: PropTypes.any,
+	onClick: PropTypes.func
+};

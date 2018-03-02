@@ -13,6 +13,6 @@ const blogs = [
 		likes: 1,
 		url: ''
 	}
-]
+];
 
-export const getAll = () => Promise.resolve(blogs)
+export const getAll = () => Promise.resolve(blogs);

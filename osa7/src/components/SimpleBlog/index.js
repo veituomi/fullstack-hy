@@ -1,1 +1,1 @@
-export { SimpleBlog } from './SimpleBlog'
+export { SimpleBlog } from './SimpleBlog';

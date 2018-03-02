@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, NavLink, Redirect } from 'react-router-dom'
-import { ListGroup, ListGroupItem } from 'react-bootstrap'
+import { ListGroup, ListGroupItem, Grid, Row, Col, Image } from 'react-bootstrap'
 import Notifications from './components/Notifications'
 
 const navlinkActive = {
@@ -206,14 +206,23 @@ class App extends React.Component {
           <h1>Software anecdotes</h1>
           <Notifications subscribe={this.subscribeNotifications} />
           <Menu />
-          <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
-          <Route exact path="/anecdotes/:id" render={({match}) =>
-            <Anecdote anecdote={this.anecdoteById(match.params.id)} />}
-          />
-          <Route path="/create" render={() =>
-            <CreateNew pushNotification={this.pushNotification} addNew={this.addNew}/>
-          }/>
-          <Route path="/about" render={() => <About />} />
+          <Grid>
+            <Row className="show-grid">
+              <Col md={8} xs={8}>
+                <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
+                <Route exact path="/anecdotes/:id" render={({match}) =>
+                  <Anecdote anecdote={this.anecdoteById(match.params.id)} />}
+                />
+                <Route path="/create" render={() =>
+                  <CreateNew pushNotification={this.pushNotification} addNew={this.addNew}/>
+                }/>
+                <Route path="/about" render={() => <About />} />
+              </Col>
+              <Col md={4} xs={4}>
+                <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/BjarneStroustrup.jpg/300px-BjarneStroustrup.jpg" />
+              </Col>
+            </Row>
+          </Grid>
           <Footer />
         </div>
       </Router>

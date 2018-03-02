@@ -3,27 +3,27 @@ const notificationsAtStart = [
 	'Start hacking'
 ];
 
-const getId = () => (100000 * Math.random()).toFixed(0);
+const getId = () => new Date().getTime();
 
 const asObject = (notification) => {
 	return {
 		content: notification,
-		id: getId()
+		time: getId()
 	};
 };
 
-export const actionFor = {
-	notificationCreation(content) {
+export const actionForNotification = {
+	create(content) {
 		return {
 			type: 'CREATE_NOTIFICATION',
 			content
 		};
 	},
 
-	notificationDeletion(notification) {
+	deleteOld() {
 		return {
 			type: 'DESTROY_NOTIFICATION',
-			id: notification.id
+			time: new Date().getTime()
 		};
 	}
 };
@@ -32,7 +32,7 @@ const initialState = notificationsAtStart.map(asObject);
 
 const reducer = (store = initialState, action) => {
 	if (action.type === 'DESTROY_NOTIFICATION') {
-		const other = store.filter(a => a.id !== action.id);
+		const other = store.filter(a => a.time > action.time - 5000);
 
 		return [...other];
 	}

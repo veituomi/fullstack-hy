@@ -17,15 +17,15 @@ const asObject = (anecdote) => {
 	};
 };
 
-export const actionFor = {
-	anecdoteCreation(content) {
+export const actionForAnecdote = {
+	create(content) {
 		return {
 			type: 'CREATE_ANECDOTE',
 			content
 		};
 	},
 
-	anecdoteVoting(anecdote) {
+	vote(anecdote) {
 		return {
 			type: 'VOTE_ANECDOTE',
 			id: anecdote.id

@@ -1,5 +1,5 @@
 import React from 'react';
-import { actionFor } from '../reducers/anecdoteReducer';
+import { actionForAnecdote } from '../reducers/anecdoteReducer';
 
 class AnecdoteList extends React.Component {
 	render() {
@@ -15,7 +15,7 @@ class AnecdoteList extends React.Component {
 						<div>
 							has {anecdote.votes}
 							<button onClick={() =>
-								this.props.store.dispatch(actionFor.anecdoteVoting(anecdote))
+								this.props.store.dispatch(actionForAnecdote.vote(anecdote))
 							}>
 								vote
 							</button>

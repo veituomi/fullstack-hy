@@ -5,17 +5,11 @@ import Filter from './Filter';
 
 class AnecdoteList extends React.Component {
 	render() {
-		const filterText = this.props.filter.text;
-		const filterMinVotes = this.props.filter.minVotes;
-		const anecdotes = this.props.anecdotes
-			.filter(a => a.content.toLowerCase().includes(filterText.toLowerCase()))
-			.filter(a => a.votes >= filterMinVotes)
-			.sort((a, b) => b.votes - a.votes);
 		return (
 			<div>
 				<h2>Anecdotes</h2>
 				<Filter></Filter>
-				{anecdotes.map(anecdote =>
+				{this.props.anecdotesToShow.map(anecdote =>
 					<div key={anecdote.id}>
 						<div>
 							{anecdote.content}
@@ -35,10 +29,18 @@ class AnecdoteList extends React.Component {
 	}
 }
 
+const anecdotesToShow = (anecdotes, filter) => {
+	const filterText = filter.text;
+	const filterMinVotes = filter.minVotes;
+	return anecdotes
+		.filter(a => a.content.toLowerCase().includes(filterText.toLowerCase()))
+		.filter(a => a.votes >= filterMinVotes)
+		.sort((a, b) => b.votes - a.votes);
+};
+
 const mapStateToProps = (state) => {
 	return {
-		anecdotes: state.anecdotes,
-		filter: state.filter
+		anecdotesToShow: anecdotesToShow(state.anecdotes, state.filter)
 	};
 };
 

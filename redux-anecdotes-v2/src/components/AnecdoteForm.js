@@ -9,10 +9,7 @@ class AnecdoteForm extends React.Component {
 		const content = e.target.anecdote.value;
 		e.target.anecdote.value = '';
 		await this.props.createAnecdote(content);
-		this.props.createNotification('Created new anecdote');
-		setTimeout(() => {
-			this.props.deleteNotifications();
-		}, 5500);
+		this.props.notify(`you created '${content}'`);
 	}
 
 	render() {
@@ -39,7 +36,6 @@ export default connect(
 	mapStateToProps,
 	{
 		createAnecdote: actionForAnecdote.create,
-		createNotification: actionForNotification.create,
-		deleteNotifications: actionForNotification.deleteOld
+		notify: actionForNotification.notify
 	}
 )(AnecdoteForm);

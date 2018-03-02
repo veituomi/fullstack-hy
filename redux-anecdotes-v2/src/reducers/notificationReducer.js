@@ -1,30 +1,38 @@
 const notificationsAtStart = [
-	'Debugging started',
-	'Start hacking'
 ];
 
-const getId = () => new Date().getTime();
+const getId = () => new Date().getTime() * 100 + Math.floor(Math.random() * 100);
 
-const asObject = (notification) => {
+const asObject = (notification, id) => {
 	return {
 		content: notification,
-		time: getId(),
-		id: Math.floor(Math.random() * 1000000)
+		id
 	};
 };
 
 export const actionForNotification = {
-	create(content) {
-		return {
-			type: 'CREATE_NOTIFICATION',
-			content
+	notify(content, time = 10) {
+		return async (dispatch) => {
+			const id = getId();
+			dispatch(actionForNotification.create(content, id));
+			setTimeout(() => {
+				dispatch(actionForNotification.delete(id));
+			}, time * 1000);
 		};
 	},
 
-	deleteOld() {
+	create(content, id) {
+		return {
+			type: 'CREATE_NOTIFICATION',
+			content,
+			id
+		};
+	},
+
+	delete(id) {
 		return {
 			type: 'DESTROY_NOTIFICATION',
-			time: new Date().getTime()
+			id
 		};
 	}
 };
@@ -33,12 +41,10 @@ const initialState = notificationsAtStart.map(asObject);
 
 const reducer = (store = initialState, action) => {
 	if (action.type === 'DESTROY_NOTIFICATION') {
-		const other = store.filter(a => a.time > action.time - 5000);
-
-		return [...other];
+		return store.filter(a => a.id !== action.id);
 	}
 	if (action.type === 'CREATE_NOTIFICATION') {
-		return [...store, asObject(action.content)];
+		return [...store, asObject(action.content, action.id)];
 	}
 
 	return store;

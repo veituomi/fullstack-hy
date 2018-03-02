@@ -1,9 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { actionForAnecdote } from '../reducers/anecdoteReducer';
+import { actionForNotification } from '../reducers/notificationReducer';
 import Filter from './Filter';
 
 class AnecdoteList extends React.Component {
+	voteHandler = (anecdote) => {
+		this.props.vote(anecdote);
+		this.props.notify(`you voted ${anecdote.content}`);
+	}
+
 	render() {
 		return (
 			<div>
@@ -17,7 +23,7 @@ class AnecdoteList extends React.Component {
 						<div>
 							has {anecdote.votes}
 							<button onClick={() =>
-								this.props.vote(anecdote)
+								this.voteHandler(anecdote)
 							}>
 								vote
 							</button>
@@ -47,6 +53,7 @@ const mapStateToProps = (state) => {
 export default connect(
 	mapStateToProps,
 	{
+		notify: actionForNotification.notify,
 		vote: actionForAnecdote.vote
 	}
 )(AnecdoteList);

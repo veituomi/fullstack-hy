@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Blog } from '../Blog';
 import Login from '../Login';
+import User from '../User';
 import NewBlog from '../NewBlog';
 import Notifications from '../Notifications';
 import * as blogService from '../../services/blogs';
@@ -94,17 +95,28 @@ export class App extends React.Component {
 										</tr>
 									</thead>
 									<tbody>
-										{this.state.users.map(user =>
-											<tr key={user.id}>
-												<td>{user.name}</td>
+										{this.state.users.map(user => {
+											const url = `/users/${user.id}`;
+											return <tr key={user.id}>
+												<td>
+													<Link to={url}>{user.name}</Link>
+												</td>
 												<td>{user.username}</td>
 												<td>{user.blogs.length}</td>
-											</tr>
-										)}
+											</tr>;
+										})}
 									</tbody>
 								</table>
 							</div>
 						} />
+						<Route path="/users/:id" render={({match}) => {
+							const user = this.state.users
+								.filter(u => u.id === match.params.id)[0];
+							if (user) {
+								return <User user={user} />;
+							}
+							return <div>Hold on. Loading data...</div>;
+						}} />
 					</div>
 				</Router>
 			</div>

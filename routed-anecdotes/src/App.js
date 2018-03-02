@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, NavLink, Redirect } from 'react-router-dom'
-import { ListGroup, ListGroupItem, Grid, Row, Col, Image } from 'react-bootstrap'
+import { ListGroup, ListGroupItem, Grid, Row, Col, Image, Navbar, NavItem, Nav, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap'
 import Notifications from './components/Notifications'
 
 const navlinkActive = {
@@ -16,17 +16,25 @@ const navigation = [
 ]
 
 const Menu = () => (
-  <div style={{ background: '#7777ff' }}>
-    {navigation.map(item =>
-      <NavLink activeStyle={navlinkActive}
-        to={item.route}
-        exact={item.route}
-        style={{
-          padding: '12px'
-        }}
-      >{item.label}</NavLink>
-    )}
-  </div>
+  <Navbar inverse collapseOnSelect>
+    <Navbar.Header>
+      <Navbar.Brand>
+        Anecdote app
+      </Navbar.Brand>
+      <Navbar.Toggle />
+    </Navbar.Header>
+    <Navbar.Collapse>
+      <Nav>
+        {
+          navigation.map(item =>
+            <NavItem href="#">
+              <Link to={item.route}>{item.label}</Link>
+            </NavItem>
+          )
+        }
+      </Nav>
+    </Navbar.Collapse>
+  </Navbar>
 )
 
 const AnecdoteList = ({ anecdotes }) => (
@@ -123,19 +131,30 @@ class CreateNew extends React.Component {
       <div>
         <h2>create a new anecdote</h2>
         <form onSubmit={this.handleSubmit}>
-          <div>
-            content 
-            <input name='content' value={this.state.content} onChange={this.handleChange} />
-          </div>
-          <div>
-            author
-            <input name='author' value={this.state.author} onChange={this.handleChange} />
-          </div>
-          <div>
-            url for more info
-            <input name='info' value={this.state.info} onChange={this.handleChange} />
-          </div> 
-          <button>create</button>
+          <FormGroup>
+            <ControlLabel>content:</ControlLabel>
+            <FormControl
+              type='text'
+              name='content'
+              value={this.state.content}
+              onChange={this.handleChange}
+            />
+            <ControlLabel>author:</ControlLabel>
+            <FormControl
+              type='text'
+              name='author'
+              value={this.state.author}
+              onChange={this.handleChange}
+            />
+            <ControlLabel>url for more info:</ControlLabel>
+            <FormControl
+              type='text'
+              name='info'
+              value={this.state.info}
+              onChange={this.handleChange}
+            />
+            <Button bsStyle="success" type="submit">create</Button>
+          </FormGroup>
         </form>
         {
           this.state.redirect ? <Redirect to={this.state.redirect} /> : <span/>
